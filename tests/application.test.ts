@@ -113,6 +113,14 @@ describe("running application", () => {
     });
   });
 
+  test("accepts the browser query parameter for search (regression: issue #1)", async () => {
+    const response = await fetch(`${base}/api/search?query=${encodeURIComponent("Книга")}`);
+    expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({
+      products: [{ id: 1, name: "Книга об архитектуре" }],
+    });
+  });
+
   test("persists an order with a supported coupon and calculates money in kopecks", async () => {
     const response = await fetch(`${base}/api/orders`, {
       method: "POST",
